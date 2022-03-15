@@ -54,7 +54,7 @@ func DefaultRuntime() *Runtime {
 			IdleConnTimeout:       time.Second * 60,
 			ResponseHeaderTimeout: time.Second * 5,
 		},
-		Timeout: 30,
+		Timeout: time.Second * 30,
 	}
 	return r
 }
