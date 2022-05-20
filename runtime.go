@@ -75,8 +75,9 @@ func (r *Runtime) Wait(ctx context.Context, p *Payload) error {
 	p.RequestID = res.Header.Get("Lambda-Runtime-Aws-Request-Id")
 	p.InvokedARN = res.Header.Get("Lambda-Runtime-Invoked-Function-Arn")
 	p.TraceID = res.Header.Get("Lambda-Runtime-Trace-Id")
+	var subctx context.Context = ctx
 	if dl, err := strconv.ParseInt(res.Header.Get("Lambda-Runtime-Deadline-Ms"), 10, 64); err == nil {
-		p.Context, p.Cancel = context.WithDeadline(ctx, time.UnixMilli(dl))
+		p.Context, p.Cancel = context.WithDeadline(subctx, time.UnixMilli(dl))
 	} else {
 		return fmt.Errorf("cannot parse deadline: %w", err)
 	}
