@@ -76,6 +76,9 @@ func (r *Runtime) Wait(ctx context.Context, p *Payload) error {
 	p.InvokedARN = res.Header.Get("Lambda-Runtime-Invoked-Function-Arn")
 	p.TraceID = res.Header.Get("Lambda-Runtime-Trace-Id")
 	var subctx context.Context = ctx
+	if p.RequestID != "" {
+		subctx = context.WithValue(subctx, CtxRequestID, p.RequestID)
+	}
 	if dl, err := strconv.ParseInt(res.Header.Get("Lambda-Runtime-Deadline-Ms"), 10, 64); err == nil {
 		p.Context, p.Cancel = context.WithDeadline(subctx, time.UnixMilli(dl))
 	} else {
