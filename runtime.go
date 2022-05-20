@@ -79,6 +79,9 @@ func (r *Runtime) Wait(ctx context.Context, p *Payload) error {
 	if p.RequestID != "" {
 		subctx = context.WithValue(subctx, CtxRequestID, p.RequestID)
 	}
+	if p.TraceID != "" {
+		subctx = context.WithValue(subctx, CtxXRayTrace, p.TraceID)
+	}
 	if dl, err := strconv.ParseInt(res.Header.Get("Lambda-Runtime-Deadline-Ms"), 10, 64); err == nil {
 		p.Context, p.Cancel = context.WithDeadline(subctx, time.UnixMilli(dl))
 	} else {
