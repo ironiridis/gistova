@@ -1,3 +1,3 @@
-module github.com/ironiridis/gistova
+module github.com/charrington-strib/gistova
 
 go 1.17
