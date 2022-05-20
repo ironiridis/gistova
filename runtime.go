@@ -72,14 +72,14 @@ func (r *Runtime) Wait(ctx context.Context, p *Payload) error {
 	defer res.Body.Close()
 
 	p.Reset()
+	p.RequestID = res.Header.Get("Lambda-Runtime-Aws-Request-Id")
+	p.InvokedARN = res.Header.Get("Lambda-Runtime-Invoked-Function-Arn")
+	p.TraceID = res.Header.Get("Lambda-Runtime-Trace-Id")
 	if dl, err := strconv.ParseInt(res.Header.Get("Lambda-Runtime-Deadline-Ms"), 10, 64); err == nil {
 		p.Context, p.Cancel = context.WithDeadline(ctx, time.UnixMilli(dl))
 	} else {
 		return fmt.Errorf("cannot parse deadline: %w", err)
 	}
-	p.RequestID = res.Header.Get("Lambda-Runtime-Aws-Request-Id")
-	p.InvokedARN = res.Header.Get("Lambda-Runtime-Invoked-Function-Arn")
-	p.TraceID = res.Header.Get("Lambda-Runtime-Trace-Id")
 	_, err = p.JSON.ReadFrom(res.Body)
 	if err != nil {
 		return fmt.Errorf("unable to read payload body: %w", err)
