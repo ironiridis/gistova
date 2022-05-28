@@ -75,6 +75,7 @@ func (r *Runtime) Loop(pr PayloadRunner, l Logger) {
 		l = DefaultLogger()
 	}
 	l.Logln("Started gistova event loop")
+	p.Logger = l
 	for {
 		err = r.Wait(ctx, &p)
 		if err != nil {

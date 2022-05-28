@@ -15,6 +15,7 @@ import (
 // a response to the Runtime API with the result.
 // Payload is intended to be reused.
 type Payload struct {
+	Logger
 	runtime    *Runtime
 	done       bool
 	Context    context.Context
