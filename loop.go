@@ -35,6 +35,7 @@ func (p *Payload) TryFunc(prf PayloadRunningFunc) error {
 func (p *Payload) Try(pr PayloadRunner) (err error) {
 	defer func() {
 		if pv := recover(); pv != nil {
+			p.Errorf("panic caught\npayload: %+v\npanic: %+v", *p, pv)
 			if perr, isErr := pv.(error); isErr {
 				// optimistically wrap errors when possible
 				err = fmt.Errorf("%T error: %w", pr, perr)
